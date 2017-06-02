@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+		Housing
+	</title>
+	<link rel="stylesheet" href="../lib/leaflet/leaflet.css" />
+	<link rel="stylesheet" href="../lib/leaflet/leaflet.label.css" />
+	<link rel="stylesheet" href="../lib/bootstrap.min.css" />
+
+	 <script src="../lib/leaflet/leaflet.js"></script>
+	<script src="../lib/leaflet/leaflet.label.js"></script>
+	<script src="../lib/d3.js"></script>
+  <script src="../lib/crossfilter.js"></script>
+  <script src="../lib/dc.js"></script>
+  	<script src="../data/sf.geojson"></script>
+	<style type="text/css">
+		h1
+		{
+			 text-align: center;
+			 }
+	</style>
+
+
+</head>
+	<body >  
+		<div class="container" style="padding: 15px">
+					<center>
+			 	    <h1 class="brand-heading">HOUSING DATA FOR SAN FRANCISCO</h1>
+			 	    </center>
+			 	    <br>
+			 	    <div class="row" >
+
+				 		<div class="col-sm-6">
+				 			<div id="map" style="height: 500px;	width: 500px; left: calc(10%);"></div>
+						</div>
+						<div class="col-sm-6" style="height: 500px;	width: 500px; " >
+							<p class="mb-4"   style=" text-align: justify;" >The SF Controller’s office aimed to study the impact of inclusionary
+housing requirements on housing development. For which, they collected regression data for
+Inclusionary Housing Simulation Model in collaboration with Blue Sky Consulting Group,
+Century Urban LLC, and Street Level Advisors.</p>
+							<p style=" text-align: justify;">Clicking on the regions in the map will show housing data in each neighbor area. Houses which are under the inclusionary housing, have been recorded over the span of 15 years, various attributes affecting a property/house are shown in the viz below.</p>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<p>Showing Visualization for:  <span id="region">TIYBI</span></p>
+							<p><i>Click on the map to select a region</i></p>
+
+							<p>Year: <span id="range">2001</span></p>
+							<p><i>Use slider to select year</i></p>
+							
+
+							
+						</div>
+					</div>
+					<h5 class="mb-4"   style="position: left:calc(20%);" >                                                       MAP OF SAN FRANCISCO
+		  			</h5>	
+		  				
+					<br>
+					<br>
+					<div class="row">
+						<div class="col-sm-12">
+							<slider >
+							<center>		   				
+							<input type="range" min="2001" max="2015" value="0" step="1" onchange="showValue(this.value);make_viz(this.value);" style="width: 900px;" />
+							<span id="range">2001</span>
+							</center>
+							</slider>
+						</div>
+					</div>
+				<div>
+					<div class="row">
+		   					<div class="col-sm-12" style="left;">
+		   					<a href="javascript:dc.filterAll(); dc.renderAll();"  ">Reset All</a>
+		   					</div>
+		   			</div>
+		   			<h4 class="mb-4"   style=" text-align: justify;" ><b>
+		  				VIZ FOR  <span id="region">TIYBI</span> IN THE YEAR OF <span id="range">2001</span>
+		  			<b></h4>	
+		  			<h6><i>Description of landuse/zoning variables given in the report</i></h6>		   		
+		  			<div class="row">
+		   			
+		   			   <div class="col-sm-6">
+		   			    	<div id="Pie" >
+				   					<h5><b>Historic/Protected Status </b></h5>
+				    				<div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+				      					<a href="javascript:historical.filterAll();dc.redrawAll();">reset</a>
+				    				</div>
+				  				</div>
+			  			</div>	
+			  		
+			  			<div class="col-sm-6">
+			  				<div id="Bar" >
+			   					<h5><b>Zoning Designation (Type of zone assigned)</b></h5>
+			    				<div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+			      					<a href="javascript:zoning.filterAll();dc.redrawAll();">reset</a>
+			    				</div>
+			  				</div>
+			  			</div>
+			  		
+			  		</div>
+			  		
+			  		<br>
+			  		
+			  		<div class="row">
+			  		
+			  			<div class="col-sm-12">
+			  				<div id="Scatter" style="height: 400px;">
+			   					<h5><b>Bldg Area under Use V/S Area for parcel (sq ft.)</b></h5>
+			    				<div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+				      				<a href="javascript:bldguse_area.filterAll();dc.redrawAll();">reset</a>
+			    				</div>
+			  				</div>
+			 			</div>
+			 		
+			 		</div>	
+			 		
+			 		<br>
+			 		<br>
+			 		<br>
+			 		
+			 		<div class="row">
+			 			<div class="col-sm-6">
+			  				<div id="Bar_2" >
+			   					<h5><b>Development Potential (Calculated with respect to Area under Use%)</b></h5>
+			    				<div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+			      					<a href="javascript:potential.filterAll();dc.redrawAll();">reset</a>
+			    				</div>
+			  				</div>
+			  			</div>
+			  			<div class="col-sm-6">
+			  				<div id="Row" >
+			   					<h5><b>Different kinds of Land Usage</b></h5>
+			    				<div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+			      					<a href="javascript:landuse.filterAll();dc.redrawAll();">reset</a>
+			    				</div>
+			  				</div>
+			  			</div>
+				  	</div>			
+		 </div>
+		  			
+		  			<hr style="width: 100%; color: grey; height: 0.5px; background-color:grey;" />
+		  			
+		  			<br>
+		  			<br>
+		  			<p class="mb-4"   style=" text-align: justify;" >
+		  				YEAR WISE TRENDS FOR PRICING, STOCK MARKET, INTEREST RATE INDICES
+		  			</p>
+
+		  			<br>
+		  			<br>
+
+		  			<br>
+		  			<br>
+		  		<div class="figures_2" style="position:absolute; top:1900px">
+		  			<div class="row">	
+		  					<div class="col-lg-6">
+							    <form accept="" style="position: left;">
+							      <h5>Select a Pricing Index</h5>
+							          <input type="radio" name="pricing" onclick="draw_line_graphs()" value="Price_Zillow" checked>SF Housing Price Index from Zillow<br>
+							          <input type="radio" name="pricing" onclick="draw_line_graphs()" value="Price_OEA" >SF Housing Price Index from SF Office of Economic Analysis
+										<br>
+							           <input type="radio" name="pricing" onclick="draw_line_graphs()" value="Inc_CostSqFt">Increment Cost per SqFt<br>
+							          <input type="radio"  name="pricing" onclick="draw_line_graphs()" value="RentComm_YrEnd">SF Commercial Rent Index (December value)
+<br>
+							          <input type="radio"  name="pricing" onclick="draw_line_graphs()" value="RentComm_Avg">SF Commercial Rent Index (Average)<br>
+							    
+							    
+							    </form>
+							</div>
+							<div class="col-lg-6">
+							   <form accept="" style="position: right;">
+							       <h5>Select Stock Market Index</h5>
+							          <input type="radio"  name="stockmarket" onclick="draw_line_graphs()" value="SP500" checked>S&P 500 Stock Market Index<br>
+							          <input type="radio"  name="stockmarket" onclick="draw_line_graphs()" value="NASDAQ" >NASDAQ Stock Market Index<br>
+							          <input type="radio"  name="stockmarket" onclick="draw_line_graphs()" value="DJ_TSM" >Dow Jones Total Stock Market<br>
+							          
+							   </form> 
+							</div>
+							  
+					</div>	
+					<div class="row">
+					 	<center>
+								<div class="col-sm-6">	
+									<div id="linechart" style="width: 500px; height: 400px;">
+						   					<h5><b>Pricing Rate V/S year</b></h5>
+						    				<div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+							      				<a href="javascript:yearTrend.filterAll();dc.redrawAll();">reset</a>
+						    				</div>
+				    				</div>
+				    			</div>	
+				    			<div class="col-sm-6">	
+									<div id="linechart_2" style="width: 500px; height: 400px;" >
+						   					<h5><b>Stock Market Index V/S year</b></h5>
+						    				<div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+							      				<a href="javascript:yearTrend_2.filterAll();dc.redrawAll();">reset</a>
+						    				</div>
+				  					</div>
+				  				</div>
+		  				</center>
+		  			</div>
+		  			<br>
+		  			<br>
+		  			<br>
+		  			<div class="row">
+		  				<div class="col-lg-6">  
+							   <form accept="" style="">
+							      <h5>Select Interest Rate</h5>
+							          <input type="radio"  name="interest" onclick="draw_line_graphs()" value="IntRate_10yr" checked>Interest rate for 10-year US Treasury Notes<br>
+							          <input type="radio" name="interest" onclick="draw_line_graphs()" value="IntRate_Mortg" >Interest rate for 30-year fixed Rate mortgage<br>
+							        
+							   </form> 
+							</div>
+						<div class="col-lg-6">  
+							   <form accept="" style="">
+							      <h5>Select Employment Rates</h5>
+							          <input type="radio"  name="emprate" onclick="draw_line_graphs()" value="SFCity_UnempRate" checked>Annual unemployment rate for San Francisco.
+										<br>
+							          <input type="radio" name="emprate" onclick="draw_line_graphs()" value="SFMSA_UnempRate" >Annual unemployment rate for San Francisco MSA.
+										<br>	
+							        
+							   </form> 
+							</div>	 
+		  			</div>
+		  			<div class="row">
+					 	<center>
+								<div class="col-sm-6">	
+									<div id="linechart_3" style="width: 500px; height: 400px;">
+						   					<h5><b>Interest Rate</b></h5>
+						    				<div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+							      				<a href="javascript:yearTrend_3.filterAll();dc.redrawAll();">reset</a>
+						    				</div>
+				    				</div>
+				    			</div>	
+				    			<div class="col-sm-6">	
+									<div id="linechart_4" style="width: 500px; height: 400px;" >
+						   					<h5><b>Employment rate</b></h5>
+						    				<div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+							      				<a href="javascript:yearTrend_4.filterAll();dc.redrawAll();">reset</a>
+						    				</div>
+				  					</div>
+				  				</div>
+		  				</center>
+		  			</div>		
+		  		</div>
+		</div>
+
+
+		<script>
+		 	    function showValue(newValue)
+					{
+						document.getElementById("range").innerHTML=newValue;
+					}
+				function regionString(newValue) {
+					document.getElementById("region").innerHTML=newValue;
+				}
+		 		function getColor(num_houses){
+		 		   var color = d3.scale.linear()
+		    				.domain([0, 15000])
+		    				.range(["#ff0000", "#000000"]);
+
+		 		   return color(num_houses);
+		 		}
+				function neighborStyle(feature){
+						return {
+							fillColor : getColor(feature.properties.num_houses),
+							weight : 2,
+							opacity : 1,
+							color : 'white',
+							dashArray : 3,
+							fillOpacity : 0.7
+						}
+					}
+		 		var map = L.map('map').setView([-122.4476, 37.7636], 13);
+		 		var sflayer = L.geoJson(
+		 			countries,
+		 			{
+		 				style : neighborStyle,
+		 				onEachFeature: onEachFeature
+		 			}).addTo(map);
+		        sflayer.eachLayer(function (layer) {
+				layer.bindPopup("Neighbor:"+layer.feature.properties.neighborho+"\nNumber of houses: "+ (layer.feature.properties.num_houses).toString());
+				});
+
+		 		var selected_neighbor, year='2001';
+		 		map.fitBounds(sflayer.getBounds());
+		 		function onEachFeature(feature, layer) {
+		 			layer.on('mouseover', function (e) {
+				            this.openPopup();
+				        });
+				        layer.on('mouseout', function (e) {
+				            this.closePopup();
+				        });
+		    		layer.on('click', function (e) {
+		    			selected_neighbor = (layer.feature.properties.neighborho);
+		    			regionString(selected_neighbor);
+		    			make_viz(year, selected_neighbor);
+
+		        });
+				}
+				function make_viz(year, neighbor=selected_neighbor){
+					check(year, selected_neighbor);
+				}
+
+		        check(year, selected_neighbor='TIYBI');
+				draw_line_graphs();
+				
+
+				function check(year, neighbor){
+				var bldguse_area = dc.scatterPlot("#Scatter");
+				var zoning = dc.barChart("#Bar");
+				var landuse = dc.rowChart("#Row");
+				var potential = dc.barChart("#Bar_2");
+				var historical = dc.pieChart("#Pie");
+
+				var MaxArea=0, MaxBldg_SqFt_Use=0, MinArea=9999999999999, MinBldg_SqFt_Use=999999999999999, MinPotential = 9999.99, MaxPotential = 0.0;
+				d3.csv("../data/"+neighbor+".csv", function(error, data) {
+				    data.forEach(function(d) {
+				      d.Bldg_SqFt_Use = parseFloat(d.Bldg_SqFt_Use); 
+				      d.Area = parseInt(d.Area); 
+				      d.DevPotential_Dens = parseFloat(d.DevPotential_Dens).toFixed(1);
+				      d.SHistoric1 = d.SHistoric1;
+				            if(d.year==year)
+						      {
+						      if(MaxBldg_SqFt_Use<d.Bldg_SqFt_Use) {MaxBldg_SqFt_Use = d.Bldg_SqFt_Use;}
+						      if(MinBldg_SqFt_Use>d.Bldg_SqFt_Use) {MinBldg_SqFt_Use = d.Bldg_SqFt_Use;}
+						      if(MaxArea<d.Area) {MaxArea = d.Area;}
+						      if(MinArea>d.Area) {MinArea = d.Area;}
+						     if(MaxPotential<d.DevPotential_Dens) {MaxPotential = d.DevPotential_Dens;}
+						      if(MinPotential>d.DevPotential_Dens) {MinPotential = d.DevPotential_Dens;}
+						      }
+					  });
+
+				   function remove_empty_bins(source_group) {
+								    return {
+								        all:function () {
+								            return source_group.all().filter(function(d) {
+								                return d.value != 0;
+								            });
+								        }
+								    };
+								} 
+				  var ndx = crossfilter(data),
+				  scatterDim = ndx.dimension(function(d) {return [d.Area, d.Bldg_SqFt_Use ]; }),
+				  scatterGroup = scatterDim.group().reduceSum(function(d) { return d.Area; }),
+				  zoningDim = ndx.dimension(function (d) { return d.Zoning; }),
+				  zoningGroup = zoningDim.group().reduceSum(function (d) { if(d.year==year) {
+				  	return 1;} else {return 0;} }),
+				  landuseDim = ndx.dimension(function (d) { return d.LandUse; }),
+				  landuseGroup = landuseDim.group().reduceSum(function (d) { if(d.year==year) {
+				  	return 1;} else {return 0;} }),
+				  potentialDim = ndx.dimension(function (d) { return d.DevPotential_Dens; }),
+				  potentialGroup = potentialDim.group().reduceCount(function (d) { if(d.DevPotential_Dens==Nan)
+				  	return 0; else return 1;
+				  }),
+			//	  potentialGroup_modified = remove_empty_bins(potentialGroup),
+				 historicalDim = ndx.dimension(function (d) { if (d.SHistoric1=='1') return 'Historic/ProtectedStatus'; else if (d.SHistoric1=='0') {return 'Not-Protected Status';} else {return 'Info Abt Status not Available';} } ),
+				  historicalGroup = historicalDim.group().reduceSum(function (d) { if(d.year==year) {
+				  	return 1;} else {return 0;} }),
+				  zoningGroup_modified = remove_empty_bins(zoningGroup);
+				  
+				  bldguse_area
+				  	.height(400)		
+					.x(d3.scale.linear().domain([MinArea*0.9,MaxArea*1.1]))
+    				.y(d3.scale.linear().domain([MinBldg_SqFt_Use*0.9,MaxBldg_SqFt_Use*1.1]))
+    		        .brushOn(false)
+				    .xAxisLabel("Area")
+				    .yAxisLabel("Bldg_SqFt_Use")
+				    .clipPadding(10)
+				    .dimension(scatterDim)
+				    .group(scatterGroup)
+				    .mouseZoomable(true)
+				   bldguse_area.margins().left += 80;
+
+				  zoning
+				    .dimension(zoningDim)
+				    .group(zoningGroup)
+				    .yAxisLabel('Count')
+				    .xAxisLabel('Zoning Categories')
+				    .x(d3.scale.ordinal())
+				    .xUnits(dc.units.ordinal)
+				    .elasticX(true)
+				    .elasticY(true)
+					zoning.margins().left += 50;
+
+				  landuse
+				    .dimension(landuseDim)
+				    .group(landuseGroup)
+				    .elasticX(true);
+
+				  potential
+				    .dimension(potentialDim)
+				    .group(potentialGroup)
+				    .x(d3.scale.ordinal())
+				    .yAxisLabel('Count')
+				    .xAxisLabel('Potential Percentage')
+				    .xUnits(dc.units.ordinal)
+				    .elasticX(true)
+				    .elasticY(true);
+				     potential.margins().left += 40;
+
+
+				  historical
+				    .dimension(historicalDim)
+				    .group(historicalGroup)
+				    .legend(dc.legend());
+
+				  dc.renderAll();
+				});
+				};
+				function draw_line_graphs() {
+							var pricing_attr;
+							var pricing_array = document.getElementsByName('pricing');
+							for(var i = 0; i < pricing_array.length; i++){
+							    if(pricing_array[i].checked){
+							        pricing_attr = pricing_array[i].value;
+							    }
+							}
+							var stockmarket_attr;
+							var stockmarket_array = document.getElementsByName('stockmarket');
+							for(var i = 0; i < stockmarket_array.length; i++){
+							    if(stockmarket_array[i].checked){
+							        stockmarket_attr = stockmarket_array[i].value;
+							    }
+							}
+							var interest_attr;
+							var interest_array = document.getElementsByName('interest');
+							for(var i = 0; i < interest_array.length; i++){
+							    if(interest_array[i].checked){
+							        interest_attr = interest_array[i].value;
+							    }
+							}
+							var emprate_attr;
+							var emprate_array = document.getElementsByName('emprate');
+							for(var i = 0; i < emprate_array.length; i++){
+							    if(emprate_array[i].checked){
+							        emprate_attr = emprate_array[i].value;
+							    }
+							}
+							console.log(stockmarket_attr);
+							console.log(pricing_attr);
+							//pricing_attr= 'Price_Zillow';
+							//stockmarket_attr = 'SP500';
+							var MaxValPricing=0, MinValPricing=999999,MinValSM=999999, MaxValSM=0, MinInt=99, MaxInt=0, Maxemprate = 0, Minemprate = 99;
+							var yearTrend = dc.lineChart("#linechart");
+							var yearTrend_2 = dc.lineChart("#linechart_2");
+							var yearTrend_3 = dc.lineChart("#linechart_3");
+							var yearTrend_4 = dc.lineChart("#linechart_4");
+
+
+							d3.csv("../data/Common.csv", function(error,data){
+								 data.forEach(function(d) {
+								      d[pricing_attr] = parseFloat(d[pricing_attr]);
+								      d[stockmarket_attr] = parseFloat(d[stockmarket_attr]);
+								      d[interest_attr] = parseFloat(d[interest_attr]);
+								      d[emprate_attr] = parseFloat(d[emprate_attr]);
+								      d.year = +d.year;
+								      if(Maxemprate<d[emprate_attr]) {Maxemprate = d[emprate_attr];}
+								      if(Minemprate>d[emprate_attr]) {Minemprate = d[emprate_attr];}
+								      if(MaxInt<d[interest_attr]) {MaxInt = d[interest_attr];}
+								      if(MinInt>d[interest_attr]) {MinInt = d[interest_attr];}
+								      if(MaxValSM<d[stockmarket_attr]) {MaxValSM = d[stockmarket_attr];}
+								      if(MinValSM>d[stockmarket_attr]) {MinValSM = d[stockmarket_attr];}
+								      if(MaxValPricing<d[pricing_attr]) {MaxValPricing = d[pricing_attr];}
+								      if(MinValPricing>d[pricing_attr]) {MinValPricing = d[pricing_attr];}
+								  });
+								var ndx = crossfilter(data),
+								lineDim = ndx.dimension(function(d) {return d.year; }),
+								lineGroup = lineDim.group().reduceSum(function(d) { return d[pricing_attr]; });
+ 								lineDim_2 = ndx.dimension(function(d) {return d.year; }),
+								lineGroup_2 = lineDim_2.group().reduceSum(function(d) { return d[stockmarket_attr]; }),
+								lineDim_3 = ndx.dimension(function(d) {return d.year; }),
+								lineGroup_3 = lineDim_3.group().reduceSum(function(d) { return d[interest_attr]; });
+ 								lineDim_4 = ndx.dimension(function(d) {return d.year; }),
+								lineGroup_4 = lineDim_4.group().reduceSum(function(d) { return d[emprate_attr]; });
+ 								
+ 								yearTrend
+								      .x(d3.scale.linear().domain([2001,2015]))
+    								  .y(d3.scale.linear().domain([MinValPricing*0.9, MaxValPricing*1.1]))
+							          .xAxisLabel('Year')
+							          .yAxisLabel(pricing_attr)
+							          .dimension(lineDim)
+							          .group(lineGroup);
+
+								yearTrend_2
+								      .x(d3.scale.linear().domain([2001,2015]))
+    								  .y(d3.scale.linear().domain([MinValSM*0.9, MaxValSM*1.1]))
+							          .xAxisLabel('Year')
+							          .yAxisLabel(stockmarket_attr)
+							          .dimension(lineDim_2)
+							          .group(lineGroup_2);
+								
+								yearTrend_3
+								      .x(d3.scale.linear().domain([2001,2015]))
+    								  .y(d3.scale.linear().domain([MinInt*0.9, MaxInt*1.1]))
+							          .xAxisLabel('Year')
+							          .yAxisLabel(interest_attr)
+							          .dimension(lineDim_3)
+							          .group(lineGroup_3);
+
+								yearTrend_4
+								      .x(d3.scale.linear().domain([2001,2015]))
+    								  .y(d3.scale.linear().domain([Minemprate*0.9, Maxemprate*1.1]))
+							          .xAxisLabel('Year')
+							          .yAxisLabel(emprate_attr)
+							          .dimension(lineDim_4)
+							          .group(lineGroup_4);
+								dc.renderAll();
+							});
+				}
+		</script>
+
+	</body>
+
+</html>
